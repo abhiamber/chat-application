@@ -52,8 +52,7 @@ app.post("/", async (req, res) => {
       }).populate("users", "-password");
       res.status(200).json(FullChat);
     } catch (error) {
-      res.status(400);
-      throw new Error(error.message);
+      return res.status(400).send(e.message);
     }
   }
 });
@@ -88,8 +87,7 @@ app.get("/alltchatofLogedIn", async (req, res) => {
   } catch (error) {
     console.log(error.message);
 
-    res.status(400);
-    throw new Error(error.message);
+    return res.status(400).send(e.message);
   }
 });
 
@@ -132,8 +130,7 @@ app.post("/groupchat", async (req, res) => {
 
     res.status(200).send(fullGroupChat);
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    return res.status(400).send(e.message);
   }
 });
 
@@ -155,8 +152,7 @@ app.put("/groupRename", async (req, res) => {
     .populate("groupAdmin", "-password");
 
   if (!updatedChat) {
-    res.status(404);
-    throw new Error("Chat Not Found");
+    return res.status(400).send(e.message);
   } else {
     // console.log(updatedChat);
     res.json(updatedChat);
@@ -183,8 +179,7 @@ app.put("/addtogroup", async (req, res) => {
     .populate("groupAdmin", "-password");
 
   if (!added) {
-    res.status(404);
-    throw new Error("Chat Not Found");
+    return res.status(400).send(e.message);
   } else {
     res.json(added);
   }
@@ -210,8 +205,7 @@ app.put("/removefromthegrp", async (req, res) => {
     .populate("groupAdmin", "-password");
 
   if (!removed) {
-    res.status(404);
-    throw new Error("Chat Not Found");
+    return res.status(400).send(e.message);
   } else {
     res.json(removed);
   }

@@ -51,8 +51,8 @@ app.post("/sendMessage", async (req, res) => {
 
     res.json(newMessage);
   } catch (e) {
-    res.status(400);
-    throw new Error(e.message);
+    return res.status(400).send(e.message);
+    // throw new Error(e.message);
   }
 });
 
@@ -68,8 +68,8 @@ app.get("/getAllMessage/:chatId", async (req, res) => {
 
     res.json(messages);
   } catch (error) {
-    res.status(400);
-    throw new Error(error.message);
+    return res.status(400).send(e.message);
+    // throw new Error(error.message);
   }
 });
 
