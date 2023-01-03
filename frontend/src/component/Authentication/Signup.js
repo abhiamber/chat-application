@@ -52,7 +52,7 @@ const Signup = () => {
         },
       };
       const { data } = await axios.post(
-        "http://localhost:5000/user/signup",
+        "https://chat-application-d8vg.onrender.com/user/signup",
         {
           name,
           email,

@@ -41,7 +41,7 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/user/login",
+        "https://chat-application-d8vg.onrender.com/user/login",
         { email, password },
         config
       );
