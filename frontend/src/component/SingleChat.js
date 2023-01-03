@@ -83,6 +83,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
       setLoading(false);
       setMessage(data);
       socket.emit("join chat", selectedChat._id);
+      // fetchAllMessageOfSelectedUser();
     } catch (e) {
       // console.log(e);
       return alert("failed to send message");
@@ -94,29 +95,34 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
   };
 
   useEffect(() => {
-    socket.on("message Received", (newMessageReceived) => {
-      // console.log(selectedChat._id);
-
-      if (selectedCompare._id !== newMessageReceived.chat._id) {
-        //
-      } else {
-        setMessage([...message, newMessageReceived]);
-      }
-    });
-  });
-
-  useEffect(() => {
     fetchAllMessageOfSelectedUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    selectedCompare = selectedChat;
   }, [selectedChat]);
 
   useEffect(() => {
     socket.emit("setup", dcoded);
     socket.on("connected", () => {
       setSocketConnected(true);
-      selectedCompare = selectedChat;
+      // selectedCompare = selectedChat;
     });
   }, [dcoded]);
+
+  useEffect(() => {
+    socket.on("message Received", (newMessageReceived) => {
+      // console.log(selectedChat._id);
+
+      if (
+        !selectedCompare ||
+        selectedCompare._id !== newMessageReceived.chat._id
+      ) {
+        setfetchChatsAgain(!fetchChatsAgain);
+        //
+      } else {
+        setMessage([...message, newMessageReceived]);
+      }
+    });
+  });
   // console.log(dcoded);
   return (
     <Container>

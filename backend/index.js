@@ -11,19 +11,22 @@ const http = require("http");
 // TOKEN_KEY=secretpassword
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 const httpServer = http.createServer(app);
 const { Server } = require("socket.io");
 
 const io = new Server(httpServer, {
   pingTimeout: 60000,
+  allowRequest: (req, callback) => {
+    const noOriginHeader = req.headers.origin === undefined;
+    callback(null, noOriginHeader);
+  },
   cors: {
-    origin: "https://chat-application-d8vg.onrender.com/",
+    origin: "http://localhost:3000/",
     method: ["GET", "POST", "DELETE", "PATCH", "PUT"],
   },
 });
-
-app.use(cors());
-app.use(express.json());
 
 const notFound = (req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
