@@ -94,7 +94,7 @@ const SideDrwaer = () => {
       };
 
       const { data } = await axios.get(
-        `http://localhost:5000/user?search=${search}`,
+        `https://chat-application-d8vg.onrender.com/user?search=${search}`,
         config
       );
       console.log(data);
@@ -125,7 +125,7 @@ const SideDrwaer = () => {
         },
       };
       const { data } = await axios.post(
-        `http://localhost:5000/chat`,
+        `https://chat-application-d8vg.onrender.com/chat`,
         {
           user_Id,
         },

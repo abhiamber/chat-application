@@ -6,6 +6,10 @@ const chats = require("./data/data");
 const cors = require("cors");
 const http = require("http");
 
+// DB_URL=mongodb+srv://abhiamber:abhiamber@cluster0.5y3p60r.mongodb.net/?retryWrites=true&w=majority
+
+// TOKEN_KEY=secretpassword
+
 const app = express();
 const httpServer = http.createServer(app);
 const { Server } = require("socket.io");
@@ -13,7 +17,7 @@ const { Server } = require("socket.io");
 const io = new Server(httpServer, {
   pingTimeout: 60000,
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://chat-application-d8vg.onrender.com/",
     method: ["GET", "POST", "DELETE", "PATCH", "PUT"],
   },
 });
@@ -72,8 +76,16 @@ const MessageRouter = require("./routes/message.route");
 const { connected } = require("process");
 
 app.get("/", (req, res) => {
+  // console.log("hello");
+
   return res.send("working fine................");
 });
+
+// app.get("/hello", (req, res) => {
+//   console.log("hello");
+
+//   return res.send("working fine hello................");
+// });
 
 app.get("/api/chat/:id", (req, res) => {
   const singlechat = chats.find((c) => c._id === req.params.id);

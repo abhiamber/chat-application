@@ -53,7 +53,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const { data } = await axios.get(
-        `http://localhost:5000/user?search=${query}`,
+        `https://chat-application-d8vg.onrender.com/user?search=${query}`,
         config
       );
       // console.log(data);
@@ -84,7 +84,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const { data } = await axios.put(
-        `http://localhost:5000/chat/groupRename`,
+        `https://chat-application-d8vg.onrender.com/chat/groupRename`,
         {
           chatId: selectedChat._id,
           chatName: groupChatName,
@@ -143,7 +143,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const { data } = await axios.put(
-        `http://localhost:5000/chat/addtogroup`,
+        `https://chat-application-d8vg.onrender.com/chat/addtogroup`,
         {
           chatId: selectedChat._id,
           userId: user1._id,
@@ -189,7 +189,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const { data } = await axios.put(
-        `http://localhost:5000/chat/removefromthegrp`,
+        `https://chat-application-d8vg.onrender.com/chat/removefromthegrp`,
         {
           chatId: selectedChat._id,
           userId: user1._id,
