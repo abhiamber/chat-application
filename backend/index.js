@@ -23,7 +23,7 @@ const io = new Server(httpServer, {
     callback(null, noOriginHeader);
   },
   cors: {
-    origin: "http://localhost:3000/",
+    origin: "https://chat-app-0c6p.onrender.com",
     method: ["GET", "POST", "DELETE", "PATCH", "PUT"],
   },
 });
