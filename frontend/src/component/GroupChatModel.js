@@ -45,7 +45,7 @@ const GroupChatModel = ({ children }) => {
       };
 
       const { data } = await axios.get(
-        `https://chat-application-d8vg.onrender.com/user?search=${query}`,
+        `https://chat-app-0c6p.onrender.com/user?search=${query}`,
         config
       );
       setLoading(false);
@@ -94,7 +94,7 @@ const GroupChatModel = ({ children }) => {
       };
 
       const { data } = await axios.post(
-        `https://chat-application-d8vg.onrender.com/chat/groupchat`,
+        `https://chat-app-0c6p.onrender.com/chat/groupchat`,
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

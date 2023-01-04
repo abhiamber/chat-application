@@ -41,7 +41,8 @@ const Login = () => {
       };
 
       const { data } = await axios.post(
-        "https://chat-application-d8vg.onrender.com/user/login",
+        "https://chat-app-0c6p.onrender.com/user/login",
+
         { email, password },
         config
       );
@@ -60,7 +61,7 @@ const Login = () => {
     } catch (error) {
       toast({
         title: "Error Occured!",
-        description: error.message,
+        description: error,
         status: "error",
         duration: 5000,
         isClosable: true,

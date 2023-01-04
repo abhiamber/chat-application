@@ -52,7 +52,7 @@ const Signup = () => {
         },
       };
       const { data } = await axios.post(
-        "https://chat-application-d8vg.onrender.com/user/signup",
+        "https://chat-app-0c6p.onrender.com/user/signup",
         {
           name,
           email,
@@ -75,7 +75,7 @@ const Signup = () => {
     } catch (error) {
       toast({
         title: "Error Occured!",
-        description: error.message,
+        description: error,
         status: "error",
         duration: 5000,
         isClosable: true,

@@ -15,7 +15,7 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import axios from "axios";
 import MessageBoxScroll from "./MessageBoxScroll";
 import io from "socket.io-client";
-let socket = io("http://localhost:3000/");
+let socket = io("https://chat-app-0c6p.onrender.com");
 let selectedCompare;
 
 const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
@@ -48,7 +48,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
         setNewMessage("");
 
         let { data } = await axios.post(
-          "https://chat-application-d8vg.onrender.com/message/sendMessage",
+          "https://chat-app-0c6p.onrender.com/message/sendMessage",
           { content: newMessage, chatId: selectedChat._id },
           config
         );
@@ -76,7 +76,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
     try {
       setLoading(true);
       let { data } = await axios.get(
-        `https://chat-application-d8vg.onrender.com/message/getAllMessage/${selectedChat._id}`,
+        `https://chat-app-0c6p.onrender.com/message/getAllMessage/${selectedChat._id}`,
         config
       );
       // console.log(data);

@@ -36,7 +36,7 @@ const MyChats = ({ fetchChatsAgain }) => {
       };
 
       const { data } = await axios.get(
-        "https://chat-application-d8vg.onrender.com/chat/alltchatofLogedIn",
+        "https://chat-app-0c6p.onrender.com/chat/alltchatofLogedIn",
         config
       );
       // console.log(data);
