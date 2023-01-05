@@ -1,6 +1,6 @@
 # Chat application
 
-## This is the chat application where user can create chat one to one and in group as well. User can create group and they can remove the pepople from group and they can add bew user as well in the group.
+## This is the chat application where user can create chat one to one and in group as well. User can create group and they can remove the people from group and they can add new user as well in the group.
 
 ## Tech Stack:
   <p>- Javascript</p>
