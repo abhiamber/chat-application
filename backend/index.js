@@ -23,7 +23,7 @@ const io = new Server(httpServer, {
   //   callback(null, noOriginHeader);
   // },
   cors: {
-    origin: "https://gleeful-marigold-cd7ebf.netlify.app/",
+    origin: "*",
     method: ["GET", "POST", "DELETE", "PATCH", "PUT"],
   },
 });
