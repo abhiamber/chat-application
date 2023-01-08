@@ -16,7 +16,7 @@ import axios from "axios";
 import MessageBoxScroll from "./MessageBoxScroll";
 import io from "socket.io-client";
 let socket;
-let EndPoint = "http://localhost:5000";
+let EndPoint = "https://chat-app-0c6p.onrender.com";
 let selectedCompare;
 const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
   const [message, setMessage] = useState([]);

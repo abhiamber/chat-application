@@ -17,7 +17,7 @@ const MessageBoxScroll = ({ message }) => {
 
               color: dcoded.id === item.sender._id ? "black" : "white",
               fontSize: "20px",
-              margin: "2px",
+              margin: "5px",
             }}
           >
             <span
@@ -27,6 +27,7 @@ const MessageBoxScroll = ({ message }) => {
                 textAlign: "center",
                 backgroundColor: "teal",
                 borderRadius: "10px",
+                padding: "2px 8px",
               }}
             >
               {" "}
