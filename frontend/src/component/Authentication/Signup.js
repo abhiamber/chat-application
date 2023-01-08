@@ -79,9 +79,7 @@ const Signup = () => {
         isClosable: true,
         position: "bottom",
       });
-      // localStorage.setItem("userInfos", JSON.stringify(data));
       setPicLoading(false);
-      // navigate("/chat");
     } catch (error) {
       toast({
         title: "Error Occured!",
