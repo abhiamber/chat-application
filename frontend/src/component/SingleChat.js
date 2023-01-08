@@ -104,7 +104,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
     socket = io(EndPoint, {
       "force new connection": true,
       reconnectionAttempts: "Infinity",
-      timeout: 60000,
+      timeout: 10000,
       transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
