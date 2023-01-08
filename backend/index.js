@@ -18,12 +18,12 @@ const { Server } = require("socket.io");
 
 const io = new Server(httpServer, {
   pingTimeout: 60000,
-  allowRequest: (req, callback) => {
-    const noOriginHeader = req.headers.origin === undefined;
-    callback(null, noOriginHeader);
-  },
+  // allowRequest: (req, callback) => {
+  //   const noOriginHeader = req.headers.origin === undefined;
+  //   callback(null, noOriginHeader);
+  // },
   cors: {
-    origin: "https://chat-app-0c6p.onrender.com",
+    origin: "http://localhost:3000",
     method: ["GET", "POST", "DELETE", "PATCH", "PUT"],
   },
 });
@@ -79,20 +79,7 @@ const MessageRouter = require("./routes/message.route");
 const { connected } = require("process");
 
 app.get("/", (req, res) => {
-  // console.log("hello");
-
   return res.send("working fine................");
-});
-
-// app.get("/hello", (req, res) => {
-//   console.log("hello");
-
-//   return res.send("working fine hello................");
-// });
-
-app.get("/api/chat/:id", (req, res) => {
-  const singlechat = chats.find((c) => c._id === req.params.id);
-  return res.send(singlechat);
 });
 
 app.use("/user", UserRoutes);

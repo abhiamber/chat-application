@@ -15,9 +15,9 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import axios from "axios";
 import MessageBoxScroll from "./MessageBoxScroll";
 import io from "socket.io-client";
-let socket = io("https://chat-app-0c6p.onrender.com");
+let socket;
+let EndPoint = "http://localhost:5000";
 let selectedCompare;
-
 const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
   const [message, setMessage] = useState([]);
   const [loadling, setLoading] = useState(false);
@@ -101,6 +101,17 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
   }, [selectedChat]);
 
   useEffect(() => {
+    socket = io(EndPoint, {
+      "force new connection": true,
+      reconnectionAttempts: "Infinity",
+      timeout: 60000,
+      transports: ["websocket"],
+      withCredentials: true,
+      extraHeaders: {
+        "my-custom-header": "abcd",
+      },
+    });
+
     socket.emit("setup", dcoded);
     socket.on("connected", () => {
       setSocketConnected(true);
