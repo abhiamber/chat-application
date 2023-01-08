@@ -44,23 +44,24 @@ const Signup = () => {
       });
       return;
     }
+
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+    const { data } = await axios.post(
+      "https://chat-app-0c6p.onrender.com/user/signup",
+      {
+        name,
+        email,
+        password,
+        pic,
+      },
+      config
+    );
     // console.log(name, email, password, pic);
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      const { data } = await axios.post(
-        "https://chat-app-0c6p.onrender.com/user/signup",
-        {
-          name,
-          email,
-          password,
-          pic,
-        },
-        config
-      );
       // console.log(data);
 
       if (data.message === "user exists") {

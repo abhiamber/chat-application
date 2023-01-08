@@ -28,7 +28,7 @@ app.post("/signup", async (req, res) => {
 
     return res.status(201).send(newUser);
   } catch (e) {
-    return res.send(e.message);
+    return res.status(403).send(e.message);
   }
 });
 

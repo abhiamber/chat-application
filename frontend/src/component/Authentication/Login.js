@@ -33,25 +33,34 @@ const Login = () => {
     }
 
     // console.log(email, password);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      "https://chat-app-0c6p.onrender.com/user/login",
+
+      { email, password },
+      config
+    );
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-
-      const { data } = await axios.post(
-        "https://chat-app-0c6p.onrender.com/user/login",
-
-        { email, password },
-        config
-      );
-
+      if (data.message === "Invalid Crediantialas") {
+        return toast({
+          title: "Error Occured!",
+          description: data.message,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
       // console.log(JSON.stringify(data));
       toast({
         title: "Login Successful",
         status: "success",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
