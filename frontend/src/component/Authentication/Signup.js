@@ -6,13 +6,13 @@ import { VStack } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
   const toast = useToast();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [name, setName] = useState();
   const [email, setEmail] = useState();
@@ -62,16 +62,26 @@ const Signup = () => {
         config
       );
       // console.log(data);
+
+      if (data.message === "user exists") {
+        return toast({
+          title: "plz try to register with other id",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
       toast({
         title: "Registration Successful",
         status: "success",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
         position: "bottom",
       });
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      // localStorage.setItem("userInfos", JSON.stringify(data));
       setPicLoading(false);
-      navigate("/chats");
+      // navigate("/chat");
     } catch (error) {
       toast({
         title: "Error Occured!",

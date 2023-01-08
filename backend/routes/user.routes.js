@@ -10,7 +10,7 @@ app.post("/signup", async (req, res) => {
   const user = await UserModel.findOne({ email });
 
   if (user) {
-    return res.status(403).send("user exists");
+    return res.status(403).send({ message: "user exists" });
   }
 
   const hash = await argon2.hash(password);
@@ -26,7 +26,7 @@ app.post("/signup", async (req, res) => {
 
     await newUser.save();
 
-    return res.status(201).send("new user created");
+    return res.status(201).send({ newUser });
   } catch (e) {
     return res.send(e.message);
   }
@@ -41,23 +41,23 @@ app.post("/login", async (req, res) => {
   const user = await UserModel.findOne({ email });
 
   if (!user || hash === user.password) {
-    return res.status(401).send("Invalid Crediantialas");
+    return res.status(401).send({ message: "Invalid Crediantialas" });
   }
-
+  console.log(user);
   try {
     const token = jwt.sign(
-      { id: user._id, name: user.name, email: user.email },
+      { id: user._id, name: user.name, email: user.email, pic: user.pic },
       process.env.TOKEN_KEY,
       { expiresIn: "30 days" }
     );
 
     const refreshToken = jwt.sign(
-      { id: user._id, name: user.name, email: user.email },
+      { id: user._id, name: user.name, email: user.email, pic: user.pic },
       process.env.TOKEN_KEY,
       { expiresIn: "28 days" }
     );
-    // console.log(token);
-    return res.send({ meassage: "login sicees", token, refreshToken });
+    console.log(token);
+    return res.send({ meassage: "login succees", token, refreshToken });
   } catch (e) {
     return res.send(e.message);
   }
