@@ -65,13 +65,14 @@ const Signup = () => {
       // console.log(data);
 
       if (data.message === "user exists") {
-        return toast({
+        toast({
           title: "plz try to register with other id",
           status: "error",
           duration: 5000,
           isClosable: true,
           position: "bottom",
         });
+        return setPicLoading(false);
       }
       toast({
         title: "Registration Successful",

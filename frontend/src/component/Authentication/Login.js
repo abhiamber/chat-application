@@ -39,15 +39,16 @@ const Login = () => {
       },
     };
 
-    const { data } = await axios.post(
+    let { data } = await axios.post(
       "https://chat-app-0c6p.onrender.com/user/login",
 
       { email, password },
       config
     );
     try {
+      console.log(data);
       if (data.message === "Invalid Crediantialas") {
-        return toast({
+        toast({
           title: "Error Occured!",
           description: data.message,
           status: "error",
@@ -55,6 +56,7 @@ const Login = () => {
           isClosable: true,
           position: "bottom",
         });
+        return setLoading(false);
       }
       // console.log(JSON.stringify(data));
       toast({
@@ -68,6 +70,7 @@ const Login = () => {
       setLoading(false);
       navigate("/chat");
     } catch (error) {
+      console.log(error.message);
       toast({
         title: "Error Occured!",
         description: error,
