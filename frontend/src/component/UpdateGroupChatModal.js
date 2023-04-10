@@ -21,6 +21,7 @@ import { useState } from "react";
 import { ChatState } from "../context/ChatProvider";
 import UserBadgeItem from "./UserBadgeItem";
 import UserListItem from "./UserListItem";
+import { API } from "../API";
 
 const UpdateGroupChatModal = ({
   // fetchMessages,
@@ -52,10 +53,7 @@ const UpdateGroupChatModal = ({
           token: user.token,
         },
       };
-      const { data } = await axios.get(
-        `https://chat-app-0c6p.onrender.com/user?search=${query}`,
-        config
-      );
+      const { data } = await axios.get(`${API}/user?search=${query}`, config);
       // console.log(data);
       setLoading(false);
       setSearchResult(data);
@@ -84,7 +82,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const { data } = await axios.put(
-        `https://chat-app-0c6p.onrender.com/chat/groupRename`,
+        `${API}/chat/groupRename`,
         {
           chatId: selectedChat._id,
           chatName: groupChatName,
@@ -143,7 +141,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const { data } = await axios.put(
-        `https://chat-app-0c6p.onrender.com/chat/addtogroup`,
+        `${API}/chat/addtogroup`,
         {
           chatId: selectedChat._id,
           userId: user1._id,
@@ -189,7 +187,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const { data } = await axios.put(
-        `https://chat-app-0c6p.onrender.com/chat/removefromthegrp`,
+        `${API}/chat/removefromthegrp`,
         {
           chatId: selectedChat._id,
           userId: user1._id,

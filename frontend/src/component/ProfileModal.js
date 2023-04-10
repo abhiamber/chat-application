@@ -23,7 +23,9 @@ const ProfileModal = ({ user, children }) => {
         <span onClick={onOpen}>{children}</span>
       ) : (
         <IconButton
-          display={{ base: "flex" }}
+          display={"flex"}
+          justifyContent={"space-around"}
+          alignItems={"center"}
           icon={<ViewIcon />}
           onClick={onOpen}
         />
@@ -34,8 +36,10 @@ const ProfileModal = ({ user, children }) => {
           <ModalHeader
             fontSize="30px"
             fontFamily="Work sans"
-            dispaly="flex"
-            justifyContent="center"
+            // dispaly="flex"
+            // justifyContent="center"
+            textAlign={"center"}
+            fontWeight={"800"}
           >
             {user.name}
           </ModalHeader>
@@ -44,17 +48,20 @@ const ProfileModal = ({ user, children }) => {
             dispaly="flex"
             flexDir="column"
             alignItems="center"
-            justifyContent="space-between"
+            justifyContent="center"
+            textAlign={"center"}
           >
             <Image
               borderRadius="full"
               boxSize="150px"
               src={user.pic}
               alt={user.name}
+              m="auto"
             />
             <Text
               fontSize={{ base: "28px", md: "30px" }}
               fontFamily="Work sans"
+              fontWeight={"800"}
             >
               Email: {user.email}
             </Text>

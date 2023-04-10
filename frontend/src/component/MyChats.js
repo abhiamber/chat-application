@@ -7,14 +7,15 @@ import { Button } from "@chakra-ui/react";
 import Chatloading from "./Chatloading";
 import { ChatState } from "../context/ChatProvider";
 import GroupChatModel from "./GroupChatModel";
+import { API } from ".././API";
 
 const MyChats = ({ fetchChatsAgain }) => {
-  const [loggedUser, setLoggedUser] = useState();
+  // const [loggedUser, setLoggedUser] = useState();
 
   const { selectedChat, setSelectedChat, dcoded, user, chats, setChats } =
     ChatState();
 
-  let getSender = (loggedUser, users) => {
+  let getSender = (users) => {
     // console.log(loggedUser, users);
     // console.log(users, chats);
 
@@ -35,10 +36,7 @@ const MyChats = ({ fetchChatsAgain }) => {
         },
       };
 
-      const { data } = await axios.get(
-        "https://chat-app-0c6p.onrender.com/chat/alltchatofLogedIn",
-        config
-      );
+      const { data } = await axios.get(`${API}/chat/alltchatofLogedIn`, config);
       // console.log(data);
       setChats(data);
     } catch (error) {
@@ -54,7 +52,7 @@ const MyChats = ({ fetchChatsAgain }) => {
   };
 
   useEffect(() => {
-    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
+    // setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
     // eslint-disable-next-line
   }, [fetchChatsAgain]);
@@ -117,9 +115,7 @@ const MyChats = ({ fetchChatsAgain }) => {
                 key={chat._id}
               >
                 <Text>
-                  {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
-                    : chat.chatName}
+                  {!chat.isGroupChat ? getSender(chat.users) : chat.chatName}
                 </Text>
               </Box>
             ))}

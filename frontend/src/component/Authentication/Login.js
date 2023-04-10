@@ -7,16 +7,17 @@ import { useState } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { API } from "../../API";
 
 const Login = () => {
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
   const toast = useToast();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const handleClick = () => setShow(!show);
 
   const submitHandler = async () => {
     setLoading(true);
@@ -40,13 +41,13 @@ const Login = () => {
     };
 
     let { data } = await axios.post(
-      "https://chat-app-0c6p.onrender.com/user/login",
+      `${API}/user/login`,
 
       { email, password },
       config
     );
     try {
-      console.log(data);
+      // console.log(data);
       if (data.message === "Invalid Crediantialas") {
         toast({
           title: "Error Occured!",
@@ -117,17 +118,6 @@ const Login = () => {
         isLoading={loading}
       >
         Login
-      </Button>
-      <Button
-        variant="solid"
-        colorScheme="teal"
-        width="100%"
-        onClick={() => {
-          setEmail("guest@example.com");
-          setPassword("123456");
-        }}
-      >
-        Get Guest User Credentials
       </Button>
     </VStack>
   );

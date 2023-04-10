@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Text } from "@chakra-ui/layout";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { Button } from "@chakra-ui/button";
@@ -12,54 +12,43 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  // MenuItemOption,
-  // MenuGroup,
-  // MenuOptionGroup,
   MenuDivider,
-} from "@chakra-ui/react";
-import {
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-} from "@chakra-ui/modal";
+} from "@chakra-ui/react";
 import { ChatState } from "../context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/hooks";
 
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 
 import axios from "axios";
 import Chatloading from "./Chatloading";
 import UserListItem from "./UserListItem";
+import { API } from ".././API";
 
 const SideDrwaer = () => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [decoded, setDecoded] = useState({});
+  // const [decoded, setDecoded] = useState({});
 
-  const {
-    setSelectedChat,
-    user,
-    // notification,
-    // setNotification,
+  const { setSelectedChat, dcoded, user, chats, setChats } = ChatState();
+  // console.log(dcoded);
 
-    chats,
-    setChats,
-  } = ChatState();
-
-  const getToken = async () => {
-    try {
-      const token = user.token;
-      const decode = jwt_decode(token);
-      setDecoded(decode);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getToken = async () => {
+  //   try {
+  //     const token = user.token;
+  //     const decode = jwt_decode(token);
+  //     setDecoded(decode);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   // const [loadingChat, setLoadingChat] = useState(false);
 
@@ -93,10 +82,7 @@ const SideDrwaer = () => {
         },
       };
 
-      const { data } = await axios.get(
-        `https://chat-app-0c6p.onrender.com/user?search=${search}`,
-        config
-      );
+      const { data } = await axios.get(`${API}/user?search=${search}`, config);
       console.log(data);
 
       setLoading(false);
@@ -125,7 +111,7 @@ const SideDrwaer = () => {
         },
       };
       const { data } = await axios.post(
-        `https://chat-app-0c6p.onrender.com/chat`,
+        `${API}/chat`,
         {
           user_Id,
         },
@@ -149,9 +135,9 @@ const SideDrwaer = () => {
     }
   };
 
-  useEffect(() => {
-    getToken();
-  }, [getToken]);
+  // useEffect(() => {
+  //   getToken();
+  // }, [getToken]);
 
   return (
     <>
@@ -184,12 +170,12 @@ const SideDrwaer = () => {
               <Avatar
                 size="sm"
                 cursor="pointer"
-                name={user.name}
-                src={user.pic}
+                name={dcoded.name}
+                src={dcoded.pic}
               />
             </MenuButton>
             <MenuList>
-              <ProfileModal user={decoded}>
+              <ProfileModal user={dcoded}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>
               <MenuDivider />

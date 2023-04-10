@@ -11,24 +11,6 @@ import { useState } from "react";
 const ChatPages = () => {
   const { user } = ChatState();
   const [fetchChatsAgain, setfetchChatsAgain] = useState(false);
-  // console.log(user);
-  // const getToken = async () => {
-  //   if (!user) {
-  //     return;
-  //   }
-  //   try {
-  //     const token = user.token;
-  //     const decode = jwt_decode(token);
-  //     console.log(decode);
-  //     setDecoded(decode);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getToken();
-  // }, [user]);
 
   return (
     <div style={{ width: "100%" }}>

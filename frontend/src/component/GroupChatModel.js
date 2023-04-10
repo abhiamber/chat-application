@@ -18,6 +18,7 @@ import axios from "axios";
 import { ChatState } from "../context/ChatProvider";
 import UserListItem from "./UserListItem";
 import UserBadgeItem from "./UserBadgeItem";
+import { API } from ".././API";
 
 const GroupChatModel = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -44,12 +45,9 @@ const GroupChatModel = ({ children }) => {
         },
       };
 
-      const { data } = await axios.get(
-        `https://chat-app-0c6p.onrender.com/user?search=${query}`,
-        config
-      );
+      const { data } = await axios.get(`${API}/user?search=${query}`, config);
       setLoading(false);
-      console.log(data);
+      // console.log(data);
       setSearchResults(data);
     } catch (error) {
       toast({
@@ -66,8 +64,6 @@ const GroupChatModel = ({ children }) => {
   // Selected users********************
 
   const handleGroup = (userToAdd) => {
-    // console.log(userToAdd);
-
     for (let i = 0; i < selectedUsers.length; i++) {
       if (searchResult[i]._id === userToAdd._id) {
         return alert("user Added");
@@ -94,7 +90,7 @@ const GroupChatModel = ({ children }) => {
       };
 
       const { data } = await axios.post(
-        `https://chat-app-0c6p.onrender.com/chat/groupchat`,
+        `${API}/chat/groupchat`,
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),
@@ -153,15 +149,17 @@ const GroupChatModel = ({ children }) => {
             </FormControl>
 
             <Box display={"flex"} w="100%" flexWrap={"wrap"}>
-              {selectedUsers?.map((u) => {
-                return (
-                  <UserBadgeItem
-                    key={u._id}
-                    user={u}
-                    handleFunction={() => handleDelete(u)}
-                  />
-                );
-              })}
+              {selectedUsers
+                ? selectedUsers.map((u) => {
+                    return (
+                      <UserBadgeItem
+                        key={u._id}
+                        user={u}
+                        handleFunction={() => handleDelete(u)}
+                      />
+                    );
+                  })
+                : null}
             </Box>
 
             <Box>

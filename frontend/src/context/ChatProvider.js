@@ -10,9 +10,11 @@ const ChatProvider = ({ children }) => {
   const [notification, setNotification] = useState([]);
   const [chats, setChats] = useState([]);
   const navigate = useNavigate();
-  let [dcoded, setDecoded] = useState();
+  let [dcoded, setDecoded] = useState({});
 
   const getToken = async () => {
+    // console.log(user);
+
     try {
       const token = user.token;
       const decode = jwt_decode(token);
@@ -24,18 +26,18 @@ const ChatProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (user) {
-      getToken();
-    }
-  }, [user]);
-
-  useEffect(() => {
     const userDetail = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userDetail);
 
     if (!userDetail) navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
+
+  useEffect(() => {
+    if (user) {
+      getToken();
+    }
+  }, [user]);
 
   return (
     <ChatContext.Provider

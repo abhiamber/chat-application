@@ -15,8 +15,10 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import axios from "axios";
 import MessageBoxScroll from "./MessageBoxScroll";
 import io from "socket.io-client";
+import { API } from "../API";
 let socket;
 let EndPoint = "https://chat-app-0c6p.onrender.com";
+
 let selectedCompare;
 const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
   const [message, setMessage] = useState([]);
@@ -48,7 +50,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
         setNewMessage("");
 
         let { data } = await axios.post(
-          "https://chat-app-0c6p.onrender.com/message/sendMessage",
+          `${API}/message/sendMessage`,
           { content: newMessage, chatId: selectedChat._id },
           config
         );
@@ -76,7 +78,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
     try {
       setLoading(true);
       let { data } = await axios.get(
-        `https://chat-app-0c6p.onrender.com/message/getAllMessage/${selectedChat._id}`,
+        `${API}/message/getAllMessage/${selectedChat._id}`,
         config
       );
       // console.log(data);
@@ -101,7 +103,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
   }, [selectedChat]);
 
   useEffect(() => {
-    socket = io(EndPoint, {
+    socket = io(API, {
       "force new connection": true,
       reconnectionAttempts: "Infinity",
       timeout: 10000,
@@ -127,7 +129,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
         !selectedCompare ||
         selectedCompare._id !== newMessageReceived.chat._id
       ) {
-        setfetchChatsAgain(!fetchChatsAgain);
+        // setfetchChatsAgain(!fetchChatsAgain);
         //
       } else {
         setMessage([...message, newMessageReceived]);
@@ -145,7 +147,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
             px="2"
             w="100%"
             display={"flex"}
-            justifyContent={{ base: "space-between" }}
+            justifyContent={"space-around"}
             alignItems="center"
           >
             <IconButton
