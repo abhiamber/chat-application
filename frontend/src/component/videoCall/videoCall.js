@@ -12,9 +12,9 @@ const VideoCall = () => {
         <Draggable>
             <div
                 style={{
-                    position: 'fixed',
-                    top: '10px',
-                    left: '10px',
+                    position: 'absolute',
+                    left: '20px',
+                    bottom: '5px',
                     zIndex: 1000,
                 }}
             >
@@ -27,8 +27,8 @@ const VideoCall = () => {
                             playsInline
                             className={`transition-all duration-300`}
                             style={{
-                                height: '100%',
-                                width: '100%',
+                                height: '80%',
+                                width: '80%',
                                 border: `${callDuration ? '1px solid black' : ''}`,
                                 borderRadius: '10px'
                             }} />
