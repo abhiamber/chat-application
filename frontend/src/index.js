@@ -6,6 +6,9 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import ChatProvider from "./context/ChatProvider";
+import VideoCallProvider from "./context/VideoCallProvider";
+import process from 'process';
+window.process = process;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,7 +16,9 @@ root.render(
     <ChakraProvider>
       <BrowserRouter>
         <ChatProvider>
-          <App />
+          <VideoCallProvider>
+            <App />
+          </VideoCallProvider>
         </ChatProvider>
       </BrowserRouter>
     </ChakraProvider>

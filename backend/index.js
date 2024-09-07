@@ -43,13 +43,12 @@ const notFound = (req, res, next) => {
 // };
 
 io.on("connection", (socket) => {
-  console.log("connected");
 
   socket.on("setup", (userRoom) => {
     if (!userRoom) {
       return;
     }
-    console.log(userRoom.id, "newconnected");
+    console.log("sever set up done with your id", userRoom.id, userRoom.name);
     socket.join(userRoom.id);
 
     socket.emit("connected");
@@ -57,26 +56,54 @@ io.on("connection", (socket) => {
 
   socket.on("join chat", (room) => {
     socket.join(room);
-    console.log(room, "connected");
+    console.log("join the partner room for chat", room);
   });
+
 
   socket.on("newMessage", (newMessageReceived) => {
     let chat = newMessageReceived.chat;
     if (!chat.users) return console.log("chat.users not defined");
 
-    chat.users.map((user) => {
+    chat?.users?.map((user) => {
       if (user._id === newMessageReceived.sender._id) {
         return;
       }
       socket.in(user._id).emit("message Received", newMessageReceived);
     });
   });
+
+
+  socket.on("requested_video_call", ({ signal, selectedChat, dcoded }) => {
+    selectedChat.users?.map((user) => {
+      if (user._id === dcoded.id) {
+        return;
+      }
+      socket.in(user._id).emit("video_call_request_coming", { signal, dcoded, selectedChat });
+    });
+  });
+
+  socket.on("answered_video_call", ({ signal, selectedChat, dcoded }) => {
+    selectedChat?.users.map((user) => {
+      if (user._id === dcoded.id) {
+        return;
+      }
+      socket.in(user._id).emit("connecting_video_call", { signal, dcoded, selectedChat });
+    });
+  });
+
+  socket.on("request_to_end_video_call", (selectedChat) => {
+    selectedChat?.users?.map((user) => {
+      console.log("🚀 ~ selectedChat?.users?.map ~ user:", user._id)
+      socket.in(user._id).emit("disconnect_video_call");
+    });
+  });
+
+
 });
 
 const UserRoutes = require("./routes/user.routes");
 const ChatRoutes = require("./routes/chat.route");
 const MessageRouter = require("./routes/message.route");
-const { connected } = require("process");
 
 app.get("/", (req, res) => {
   return res.send("working fine................");
@@ -91,5 +118,5 @@ app.use(notFound);
 
 httpServer.listen(PORT, async (req, res) => {
   await connect();
-  console.log("working");
+  console.log("🚀 ~ httpServer.listen ~ listening :", PORT)
 });

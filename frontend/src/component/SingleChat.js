@@ -14,27 +14,26 @@ import ProfileModal from "./ProfileModal";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import axios from "axios";
 import MessageBoxScroll from "./MessageBoxScroll";
-import io from "socket.io-client";
 import { API } from "../API";
-let socket;
-let EndPoint = "https://chat-app-0c6p.onrender.com";
+import VideoCall from './videoCall/videoCall'
+import VideoCallIcon from "./videoCall/videoCallIcon";
+import { VideoCallState } from "../context/VideoCallProvider";
+import CallNotificationMessage from "./callComingNotification";
+import CallTime from "./videoCall/callTimer";
 
-let selectedCompare;
+
 const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
-  const [message, setMessage] = useState([]);
-  const [loadling, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
-  const [socketConnected, setSocketConnected] = useState(false);
-  const { selectedChat, setSelectedChat, user, dcoded } = ChatState();
-  // console.log(selectedChat);
+  const { selectedChat, setSelectedChat, user, dcoded, socketConnection, message, setMessage } = ChatState();
+  const { startVideoCall, callDuration, iseVideoCallStarted } = VideoCallState();
+
 
   let getSender = (loggedUser, users) => {
-    // console.log(loggedUser, users);
     return users[0]._id === dcoded.id ? users[1].name : users[0].name;
   };
 
   let getSenderFull = (loggedUser, users) => {
-    // console.log(loggedUser, users);
     return users[0]._id === dcoded.id ? users[1] : users[0];
   };
 
@@ -55,7 +54,7 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
           config
         );
 
-        socket.emit("newMessage", data);
+        socketConnection.emit("newMessage", data);
 
         setMessage([...message, data]);
       } catch (e) {
@@ -81,13 +80,10 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
         `${API}/message/getAllMessage/${selectedChat._id}`,
         config
       );
-      // console.log(data);
       setLoading(false);
       setMessage(data);
-      socket.emit("join chat", selectedChat._id);
-      // fetchAllMessageOfSelectedUser();
+      socketConnection.emit("join chat", selectedChat._id);
     } catch (e) {
-      // console.log(e);
       return alert("failed to send message");
     }
   };
@@ -98,139 +94,111 @@ const SingleChat = ({ fetchChatsAgain, setfetchChatsAgain }) => {
 
   useEffect(() => {
     fetchAllMessageOfSelectedUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    selectedCompare = selectedChat;
   }, [selectedChat]);
 
-  useEffect(() => {
-    socket = io(API, {
-      "force new connection": true,
-      reconnectionAttempts: "Infinity",
-      timeout: 10000,
-      transports: ["websocket"],
-      withCredentials: true,
-      extraHeaders: {
-        "my-custom-header": "abcd",
-      },
-    });
 
-    socket.emit("setup", dcoded);
-    socket.on("connected", () => {
-      setSocketConnected(true);
-      // selectedCompare = selectedChat;
-    });
-  }, [dcoded]);
-
-  useEffect(() => {
-    socket.on("message Received", (newMessageReceived) => {
-      // console.log(selectedChat._id);
-
-      if (
-        !selectedCompare ||
-        selectedCompare._id !== newMessageReceived.chat._id
-      ) {
-        // setfetchChatsAgain(!fetchChatsAgain);
-        //
-      } else {
-        setMessage([...message, newMessageReceived]);
-      }
-    });
-  });
-  // console.log(dcoded);
   return (
     <Container>
-      {selectedChat ? (
-        <Box>
-          <Text
-            fontSize={{ base: "28px", md: "30px" }}
-            pb="3"
-            px="2"
-            w="100%"
-            display={"flex"}
-            justifyContent={"space-around"}
-            alignItems="center"
-          >
-            <IconButton
-              display={{ base: "flex", md: "none" }}
-              icon={<ArrowBackIcon />}
-              onClick={() => setSelectedChat("")}
-            />
+      {!iseVideoCallStarted && <CallNotificationMessage />}
 
-            {!selectedChat.isGroupChat ? (
-              <Box display={"flex"} justifyContent="space-between">
-                {getSender(user, selectedChat.users)}
+      {callDuration && <CallTime />}
+      <VideoCall />
 
-                <ProfileModal user={getSenderFull(user, selectedChat.users)} />
-              </Box>
-            ) : (
-              <Box display={"flex"} justifyContent="space-between" w="100%">
-                {selectedChat.chatName.toUpperCase()}
+      {
+        selectedChat ? (
+          <Box>
+            <Text
+              fontSize={{ base: "28px", md: "30px" }}
+              pb="3"
+              px="2"
+              w="100%"
+              display={"flex"}
+              justifyContent={"space-around"}
+              alignItems="center"
+            >
+              <IconButton
+                display={{ base: "flex", md: "none" }}
+                icon={<ArrowBackIcon />}
+                onClick={() => setSelectedChat("")}
+              />
 
-                <UpdateGroupChatModal
-                  fetchChatsAgain={fetchChatsAgain}
-                  setfetchChatsAgain={setfetchChatsAgain}
-                  fetchAllMessageOfSelectedUser={fetchAllMessageOfSelectedUser}
+              {!selectedChat.isGroupChat ? (
+                <Box display={"flex"} justifyContent="space-between" gap={2}>
+                  {getSender(user, selectedChat.users)}
+                  <VideoCallIcon onClick={startVideoCall} />
+                  <ProfileModal user={getSenderFull(user, selectedChat.users)} />
+                </Box>
+              ) : (
+                <Box display={"flex"} justifyContent="space-between" w="100%">
+                  {selectedChat.chatName.toUpperCase()}
+
+                  <UpdateGroupChatModal
+                    fetchChatsAgain={fetchChatsAgain}
+                    setfetchChatsAgain={setfetchChatsAgain}
+                    fetchAllMessageOfSelectedUser={fetchAllMessageOfSelectedUser}
+                  />
+
+                </Box>
+              )}
+            </Text>
+
+            <Box
+              display={"flex"}
+              flexDir="column"
+              justifyContent={"flex-end"}
+              p={3}
+              w="100%"
+              h="100%"
+              borderRadius={"1g"}
+              overflow="hidden"
+            >
+              {loading ? (
+                <Spinner
+                  size={"xl"}
+                  w={20}
+                  h={20}
+                  alignContent="center"
+                  margin={"auto"}
                 />
-              </Box>
-            )}
-          </Text>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    overflowY: "scroll",
+                    width: "100%",
+                    height: "60vh",
+                  }}
+                >
+                  <MessageBoxScroll message={message} />
 
-          <Box
-            display={"flex"}
-            flexDir="column"
-            justifyContent={"flex-end"}
-            p={3}
-            w="100%"
-            h="100%"
-            borderRadius={"1g"}
-            overflow="hidden"
-          >
-            {loadling ? (
-              <Spinner
-                size={"xl"}
-                w={20}
-                h={20}
-                alignContent="center"
-                margin={"auto"}
-              />
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  overflowY: "scroll",
-                  width: "100%",
-                  height: "60vh",
-                }}
-              >
-                <MessageBoxScroll message={message} />
-              </div>
-            )}
+                </div>
+              )}
 
-            <FormControl onKeyDown={sendMessage} isRequired mt={3}>
-              <Input
-                // variant={"filled"}
-                bg="#E0E0E0"
-                placeholder="Enter a Message..."
-                onChange={typingHandler}
-                value={newMessage}
-                alignItems="baseline"
-              />
-            </FormControl>
+              <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+                <Input
+                  // variant={"filled"}
+                  bg="#E0E0E0"
+                  placeholder="Enter a Message..."
+                  onChange={typingHandler}
+                  value={newMessage}
+                  alignItems="baseline"
+                />
+              </FormControl>
+            </Box>
           </Box>
-        </Box>
-      ) : (
-        <Box
-          display="flex"
-          alignItems={"center"}
-          justifyContent="center"
-          h="100%"
-        >
-          <Text fontSize={"3xl"} pb={3}>
-            Please start Chating
-          </Text>
-        </Box>
-      )}
+        ) : (
+          <Box
+            display="flex"
+            alignItems={"center"}
+            justifyContent="center"
+            h="100%"
+          >
+            <Text fontSize={"3xl"} pb={3}>
+              Please start Chating
+            </Text>
+          </Box>
+        )}
     </Container>
   );
 };
